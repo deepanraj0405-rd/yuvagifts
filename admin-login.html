@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrator Authentication – Yuvagifts</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Bypass login portal - redirect directly to Admin Dashboard
+    localStorage.setItem('yuvagifts_admin', 'true');
+    location.replace('admin-dashboard.html');
+  </script>
+</head>
+<body>
+<div id="nav"></div>
+
+<section class="auth-section admin-auth">
+  <div class="auth-card">
+    <div style="font-size:2rem; margin-bottom:0.5rem">🔒</div>
+    <h2>Internal Portal Access</h2>
+    <p class="auth-sub">Secure authentication for store managers &amp; curators.</p>
+    <form onsubmit="adminLogin(event)">
+      <input type="text" id="adminUser" required autocomplete="username">
+      <input type="password" id="adminPass" required autocomplete="current-password">
+      <button type="submit" class="btn-primary" style="width:100%">Authenticate &amp; Open Dashboard</button>
+      <button type="button" class="btn-ghost" onclick="quickAdminAccess()" style="width:100%; margin-top:0.65rem; color:#ffffff; border-color:rgba(255,255,255,0.35);">⚡ Quick Access to Admin Dashboard</button>
+      <div style="margin-top:0.85rem; text-align:center;">
+        <a href="index.html" style="color:rgba(255,255,255,0.85); font-size:0.84rem; text-decoration:underline;">&larr; Return to Storefront Home</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<div id="footer"></div>
+<script src="js/main.js"></script>
+<script>
+  function quickAdminAccess() {
+    localStorage.setItem('yuvagifts_admin', 'true');
+    location.href = 'admin-dashboard.html';
+  }
+</script>
+</body>
+</html>

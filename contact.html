@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Our Gifting Concierge – Yuvagifts</title>
+  <meta name="description" content="Reach the Yuvagifts concierge team for custom hampers, bespoke styling, order inquiries, and corporate gifting.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="wrap">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">YG</span>
+        <span class="logo-text">YUVA<b>GIFTS</b></span>
+      </a>
+      <button class="menu-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Shop Catalog</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+        <li><a href="admin-dashboard.html" class="admin-btn">Admin Portal</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<div class="wrap">
+  <section class="section" style="padding-top:3.5rem;">
+    <div class="section-eyebrow">CLIENT SERVICES</div>
+    <h1 class="section-title">Connect with Our Gifting Stylists</h1>
+    <p class="section-sub">Have a question regarding order tracking, custom hampers, or corporate partnerships? We respond promptly seven days a week.</p>
+    
+    <div class="contact-wrapper">
+      <div class="contact-info">
+        <h3>Concierge Information</h3>
+        <p><strong>Direct Telephone:</strong><br><a href="tel:918637604442">+91 86376 04442</a></p>
+        <p><strong>WhatsApp Concierge:</strong><br><a href="https://wa.me/918637604442?text=Hello%20Yuvagifts,%20I%20have%20an%20inquiry" target="_blank" rel="noopener">Chat with a Gifting Consultant &rarr;</a></p>
+        <p><strong>Client Support:</strong><br><a href="mailto:concierge@yuvagifts.com">concierge@yuvagifts.com</a></p>
+        <p><strong>Boutique Studio:</strong><br>Yuvagifts Atelier, High Street Retail Gallery, India</p>
+        <p><strong>Operating Hours:</strong><br>Monday &ndash; Sunday: 8:00 AM &ndash; 10:00 PM IST</p>
+      </div>
+
+      <div class="contact-form-card">
+        <form class="contact-form" onsubmit="submitContact(event)">
+          <h3>Submit an Inquiry</h3>
+          <input type="text" placeholder="Full Name *" required>
+          <input type="email" placeholder="Email Address *" required>
+          <input type="tel" placeholder="Mobile / WhatsApp Number *" required>
+          <select aria-label="Inquiry Type">
+            <option value="general">Personal Gift Inquiry</option>
+            <option value="corporate">Corporate / Bulk Gifting</option>
+            <option value="wedding">Wedding Favors &amp; Troussier</option>
+            <option value="order">Order Tracking Assistance</option>
+          </select>
+          <textarea placeholder="Describe your gift requirements or order question..." rows="5" required></textarea>
+          <button type="submit" class="btn-primary" style="width:100%">Transmit Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="footer"></div>
+<script src="js/main.js"></script>
+</body>
+</html>

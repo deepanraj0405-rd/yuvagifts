@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1,
+    "name": "spiderman frame",
+    "category": "birthday",
+    "price": 2000,
+    "originalPrice": 4999,
+    "tag": "Bestseller",
+    "emoji": "🎁",
+    "image": "http://localhost:3000/uploads/prod_1792075803576_445726-120703_peter_parker_and_gwen_stacy_1_.jpg",
+    "stock": 25,
+    "sold": 0,
+    "rating": 4.9,
+    "reviews": 0,
+    "deliveryTime": "Same Day",
+    "description": "product",
+    "includes": [
+      "luxury wrapping"
+    ],
+    "isPublished": true,
+    "status": "live",
+    "createdAt": "2026-10-15T14:50:27.963Z",
+    "updatedAt": "2026-10-15T14:50:27.963Z"
+  }
+]

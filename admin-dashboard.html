@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store Management Portal – Yuvagifts</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="wrap">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">YG</span>
+        <span class="logo-text">YUVA<b>GIFTS</b></span>
+        <span class="admin-badge">Admin</span>
+      </a>
+      <button class="menu-toggle" aria-label="Toggle navigation" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Shop Catalog</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="admin-login.html" class="admin-btn active">Admin Portal</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<!-- Admin Hero Banner -->
+<div class="admin-hero">
+  <div class="wrap">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <div class="admin-hero-badge">Administrator Portal</div>
+        <h1>Storefront Management &amp; Analytics</h1>
+        <p>Manage product catalog, inventory levels, pricing, and client order logs.</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+        <span class="db-status-pill offline" id="dbStatusBadge">
+          <span class="db-dot"></span> <span id="dbStatusText">Checking Database...</span>
+        </span>
+        <span class="db-file-pill" id="dbFileBadge" style="display:none;" title="Database file path"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="section" style="padding-top:2rem">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-icon">📦</span>
+        <h3>Active Products</h3>
+        <p id="totalProducts">0</p>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">💬</span>
+        <h3>Inquiries &amp; Orders</h3>
+        <p id="totalSales">0</p>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🏷️</span>
+        <h3>Units Dispatched</h3>
+        <p id="productsSold">0</p>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">💰</span>
+        <h3>Gross Revenue</h3>
+        <p id="totalRevenue">₹0</p>
+      </div>
+    </div>
+
+    <!-- Add / Edit Product Form -->
+    <div class="admin-panel" id="productFormPanel">
+      <div class="admin-panel-header">
+        <h3 id="formTitle">Create New Catalog Product</h3>
+        <button class="admin-form-toggle" id="formToggleBtn" onclick="toggleForm()">Hide Editor Form ▲</button>
+      </div>
+
+      <!-- Published Success Banner -->
+      <div id="publishSuccessBanner" class="publish-success-banner" style="display:none;" role="status">
+        <div class="publish-banner-left">
+          <span class="publish-banner-badge">✓ PUBLISHED</span>
+          <div>
+            <h4 id="publishBannerTitle" style="margin:0 0 0.2rem; font-size:1rem; color:#065f46">Product Published Successfully!</h4>
+            <p id="publishBannerMsg" style="margin:0; font-size:0.86rem; color:#047857">Product is now live on the storefront and available for customers to order.</p>
+          </div>
+        </div>
+        <div class="publish-banner-right">
+          <a href="products.html" target="_blank" class="publish-banner-view-btn">View in Store &rarr;</a>
+          <button type="button" class="publish-banner-close" onclick="dismissPublishBanner()" aria-label="Dismiss message">&times;</button>
+        </div>
+      </div>
+
+      <form id="productForm" onsubmit="saveProduct(event)" autocomplete="off" novalidate>
+        <input type="hidden" id="editId">
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fName">Product Title <span class="label-required">*</span></label>
+            <input type="text" id="fName" placeholder="e.g. Crimson Rose Elegance Bouquet" required>
+          </div>
+          <div class="form-group">
+            <label for="fCategory">Collection / Occasion <span class="label-required">*</span></label>
+            <select id="fCategory" required>
+              <option value="birthday" selected>Birthday Celebrations</option>
+              <option value="anniversary">Anniversary Milestones</option>
+              <option value="wedding">Wedding &amp; Bridal</option>
+              <option value="festival">Festive &amp; Cultural</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fPrice">Selling Price (₹) <span class="label-required">*</span></label>
+            <input type="number" id="fPrice" placeholder="e.g. 799" min="1" required>
+          </div>
+          <div class="form-group">
+            <label for="fOriginalPrice">Original Price / M.R.P. (₹)</label>
+            <input type="number" id="fOriginalPrice" placeholder="e.g. 999" min="1">
+          </div>
+          <div class="form-group">
+            <label for="fTag">Curator Tag</label>
+            <input type="text" id="fTag" placeholder="e.g. Bestseller, Luxury Edition">
+          </div>
+          <div class="form-group">
+            <label for="fStock">Inventory Stock <span class="label-required">*</span></label>
+            <input type="number" id="fStock" placeholder="e.g. 25" min="0" value="25" required>
+          </div>
+          <div class="form-group">
+            <label for="fSold">Units Sold</label>
+            <input type="number" id="fSold" placeholder="e.g. 0" min="0" value="0">
+          </div>
+          <div class="form-group">
+            <label for="fRating">Rating <span class="label-hint">(1.0 &ndash; 5.0)</span></label>
+            <input type="number" id="fRating" placeholder="e.g. 4.9" min="1" max="5" step="0.1" value="4.9">
+          </div>
+          <div class="form-group">
+            <label for="fReviews">Review Count</label>
+            <input type="number" id="fReviews" placeholder="e.g. 42" min="0" value="0">
+          </div>
+          <div class="form-group">
+            <label for="fDelivery">Delivery Guarantee</label>
+            <select id="fDelivery">
+              <option value="Same Day">Same Day Dispatch</option>
+              <option value="Next Day">Next Day Delivery</option>
+              <option value="2–3 Days">2–3 Days Custom Order</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fEmoji">Fallback Emoji Icon</label>
+            <input type="text" id="fEmoji" placeholder="e.g. 🌹" maxlength="4">
+          </div>
+          <div class="form-group full-width">
+            <label>Product Photography <span class="label-hint">(Upload an image file or paste an image URL)</span></label>
+            <div class="image-upload-wrapper">
+              <input type="text" id="fImage" placeholder="https://... or click 'Upload Photo' on the right" oninput="updatePhotoPreview()">
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <label for="fImageFile" class="file-upload-btn-label">
+                  📁 Upload Photo
+                  <input type="file" id="fImageFile" accept="image/*" style="display:none" onchange="handleImageFileUpload(event)">
+                </label>
+                <div class="image-preview-box" id="imagePreviewBox" title="Product Photo Preview">
+                  <span id="previewEmojiPlaceholder">📷</span>
+                  <img id="previewImg" src="" alt="Preview" style="display:none">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="fDesc">Product Description</label>
+          <textarea id="fDesc" rows="3" placeholder="Provide elegant, sensory product copy detailing materials, scents, or origin..."></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="fIncludes">Package Inclusions <span class="label-hint">(one item per line)</span></label>
+          <textarea id="fIncludes" rows="3" placeholder="24 Fresh Crimson Roses&#10;Eco-Friendly Kraft Wrapping&#10;Satin Ribbon&#10;Handwritten Greeting Card"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" id="submitBtn">Publish Product to Store</button>
+          <button type="button" class="btn-cancel" id="cancelBtn" onclick="resetForm()" style="display:none">Cancel Edit</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Product List Table -->
+    <div class="admin-panel">
+      <div class="admin-panel-header" style="flex-wrap:wrap; gap:1rem;">
+        <div>
+          <div style="display:flex; align-items:center; gap:0.6rem;">
+            <h3 style="margin:0;">Master Catalog Inventory</h3>
+            <span class="badge" id="inventoryCountBadge" style="background:#701a44; color:#ffffff; font-size:0.75rem; font-weight:700; padding:0.22rem 0.65rem; border-radius:99px;">0 Products Live</span>
+          </div>
+          <span style="font-size:0.8rem; color:var(--muted)">Any additions, changes, or deletions sync instantly to the central database</span>
+        </div>
+        <div class="admin-actions-bar">
+          <input type="search" id="adminSearch" placeholder="Search catalog..." oninput="renderAdminTable()" class="admin-search" style="max-width:200px">
+          <a href="products.html" target="_blank" class="btn-db-action" style="background:#059669; color:#ffffff; border-color:#059669; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; font-weight:700;" title="View all live products on the public Shop Catalog">🛍️ Show on Shop Catalog</a>
+          <button type="button" class="btn-db-action" onclick="refreshFromDatabase()" title="Fetch latest data from central database">🔄 Sync DB</button>
+          <button type="button" class="btn-db-action" onclick="confirmResetDatabase()" title="Clear all products from catalog">🗑️ Clear Catalog</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table" id="adminProductTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Thumbnail</th>
+              <th>Product Title</th>
+              <th>Store Status</th>
+              <th>Category</th>
+              <th>Pricing</th>
+              <th>Stock</th>
+              <th>Dispatched</th>
+              <th>Rating</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productTable"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sales Report -->
+    <div class="admin-panel">
+      <div class="admin-panel-header" style="margin-bottom:0;padding-bottom:1rem">
+        <h3>Recent Order &amp; Dispatch Ledger</h3>
+      </div>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>Date</th><th>Product Purchased</th><th>Client Name</th><th>Order Value</th><th>Status</th></tr>
+          </thead>
+          <tbody id="salesTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-card delete-modal">
+    <span class="delete-icon">⚠️</span>
+    <h3>Confirm Product Removal</h3>
+    <p id="deleteModalMsg">Are you certain you wish to remove this product from the master catalog? This action will immediately delete it from client view.</p>
+    <div class="delete-actions">
+      <button class="btn-cancel-md" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn-delete-confirm" id="confirmDeleteBtn">Delete Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- Clear Catalog Modal -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal-card delete-modal">
+    <span class="delete-icon">🗑️</span>
+    <h3>Clear Entire Catalog</h3>
+    <p>Are you sure you want to remove all products from the catalog? This will delete all catalog items so you can start completely fresh.</p>
+    <div class="delete-actions">
+      <button class="btn-cancel-md" onclick="closeResetModal()">Cancel</button>
+      <button class="btn-primary" style="padding:0.6rem 1.4rem; background:#dc2626" id="confirmResetBtn" onclick="doResetDatabase()">Yes, Clear Catalog</button>
+    </div>
+  </div>
+</div>
+
+<!-- Product Published / Updated Success Modal -->
+<div class="modal-overlay" id="publishSuccessModal" role="dialog" aria-modal="true" aria-labelledby="pubSuccessTitle">
+  <div class="modal-card publish-success-card" style="position:relative;">
+    <button class="modal-close" onclick="closePublishSuccessModal()" aria-label="Close dialog" style="position:absolute; top:1rem; right:1rem; font-size:1.8rem; background:none; border:none; cursor:pointer; color:var(--muted);">&times;</button>
+    <div class="publish-success-icon-badge">🎉</div>
+    <h3 id="pubSuccessTitle" class="publish-success-title">Product Published Successfully!</h3>
+    <p id="pubSuccessSubtitle" class="publish-success-sub">Your gift has been safely saved to the database and is now live on the online store catalog.</p>
+
+    <!-- Product Summary Card inside Modal -->
+    <div class="publish-preview-card" id="publishProductPreviewCard">
+      <div class="publish-preview-thumb-box" id="pubPreviewThumb">
+        <span>🎁</span>
+      </div>
+      <div class="publish-preview-details">
+        <span class="cat-tag" id="pubPreviewCat">Birthday</span>
+        <h4 id="pubPreviewName" style="margin:0.25rem 0 0.4rem; font-size:1.1rem; color:var(--ink)">Product Name</h4>
+        <div class="publish-preview-meta-row">
+          <span class="pub-preview-price-tag" id="pubPreviewPrice">₹999</span>
+          <span class="pub-preview-stock-pill" id="pubPreviewStock">📦 25 in stock</span>
+          <span class="pub-preview-status-pill">🟢 Live on Store</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="publish-modal-actions" style="display:flex; flex-direction:column; gap:0.6rem;">
+      <button type="button" class="btn-primary" style="background:#0f766e; width:100%;" onclick="scrollToInventoryTable()">
+        📋 View in Master Catalog Inventory Table ↓
+      </button>
+      <div style="display:flex; gap:0.6rem; width:100%;">
+        <a href="products.html" target="_blank" class="btn-primary pub-store-link" id="pubLiveStoreBtn" style="flex:1;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.35rem"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          View on Live Store
+        </a>
+        <button type="button" class="btn-cancel-md" onclick="closePublishSuccessModal()" style="flex:1;">+ Add Another Product</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="footer"></div>
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

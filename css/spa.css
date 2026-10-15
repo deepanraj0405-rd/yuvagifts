@@ -1,0 +1,30 @@
+/* ================================================================
+   SINGLE PAGE APP (SPA) SECTION CONTROLLER STYLES
+================================================================ */
+.spa-section {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.spa-section.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Single page sticky navigation enhancements */
+.nav-links a {
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav-links a.active {
+  color: #ffffff;
+  border-bottom: 2px solid var(--gold);
+}
+
+.nav-links a.admin-btn.active {
+  background: var(--gold);
+  color: var(--ink);
+  border-bottom: none;
+}
