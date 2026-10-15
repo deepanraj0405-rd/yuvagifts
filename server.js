@@ -1,3 +1,4 @@
+
 /**
  * ===================================================================
  * YUVAGIFTS – EXPRESS API & APPLICATION SERVER (server.js)
@@ -321,19 +322,24 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Start listening
-const server = app.listen(PORT, async () => {
-  const stats = await db.getStats();
-  console.log('\n======================================================');
-  console.log('       🎁 YUVAGIFTS STOREFRONT & DATABASE SERVER      ');
-  console.log('======================================================');
-  console.log(` • Server running on:  http://localhost:${PORT}`);
-  console.log(` • Database Engine:    ${stats.engine}`);
-  console.log(` • Total Live Items:   ${stats.totalProducts}`);
-  console.log(` • Customer Catalog:   http://localhost:${PORT}/products.html`);
-  console.log(` • Admin Portal:       http://localhost:${PORT}/admin-dashboard.html`);
-  console.log(` • Database API:       http://localhost:${PORT}/api/products`);
-  console.log('======================================================\n');
-});
+// In serverless environments like Vercel, export app directly.
+// Only start standalone HTTP server when running locally.
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  const server = app.listen(PORT, async () => {
+    const stats = await db.getStats();
+    console.log('\n======================================================');
+    console.log('       🎁 YUVAGIFTS STOREFRONT & DATABASE SERVER      ');
+    console.log('======================================================');
+    console.log(` • Server running on:  http://localhost:${PORT}`);
+    console.log(` • Database Engine:    ${stats.engine}`);
+    console.log(` • Total Live Items:   ${stats.totalProducts}`);
+    console.log(` • Customer Catalog:   http://localhost:${PORT}/products.html`);
+    console.log(` • Admin Portal:       http://localhost:${PORT}/admin-dashboard.html`);
+    console.log(` • Database API:       http://localhost:${PORT}/api/products`);
+    console.log('======================================================\n');
+  });
+  module.exports = { app, server };
+} else {
+  module.exports = app;
+}
 
-module.exports = { app, server };
